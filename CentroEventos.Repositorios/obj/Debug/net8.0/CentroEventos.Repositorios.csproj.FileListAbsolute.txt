@@ -1,0 +1,15 @@
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/bin/Debug/net8.0/CentroEventos.Repositorios.deps.json
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/bin/Debug/net8.0/CentroEventos.Repositorios.dll
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/bin/Debug/net8.0/CentroEventos.Repositorios.pdb
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/bin/Debug/net8.0/CentroEventos.Aplicacion.dll
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/bin/Debug/net8.0/CentroEventos.Aplicacion.pdb
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/obj/Debug/net8.0/CentroEventos.Repositorios.csproj.AssemblyReference.cache
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/obj/Debug/net8.0/CentroEventos.Repositorios.GeneratedMSBuildEditorConfig.editorconfig
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/obj/Debug/net8.0/CentroEventos.Repositorios.AssemblyInfoInputs.cache
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/obj/Debug/net8.0/CentroEventos.Repositorios.AssemblyInfo.cs
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/obj/Debug/net8.0/CentroEventos.Repositorios.csproj.CoreCompileInputs.cache
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/obj/Debug/net8.0/CentroEventos.Repositorios.csproj.CopyComplete
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/obj/Debug/net8.0/CentroEventos.Repositorios.dll
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/obj/Debug/net8.0/refint/CentroEventos.Repositorios.dll
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/obj/Debug/net8.0/CentroEventos.Repositorios.pdb
+/home/leandro/.NET/CentroEventos/CentroEventos.Repositorios/obj/Debug/net8.0/ref/CentroEventos.Repositorios.dll

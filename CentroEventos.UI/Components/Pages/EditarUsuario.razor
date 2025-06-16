@@ -1,0 +1,220 @@
+@page "/usuario/{Id:int?}"
+@rendermode InteractiveServer
+
+@using CentroEventos.UI.Components;
+@using CentroEventos.Aplicacion.Entidades;
+@using CentroEventos.Aplicacion.Interfaces;
+@using CentroEventos.Aplicacion.CasosDeUso;
+@inject NavigationManager Navegador;
+@inject UsuarioAltaUseCase UsuarioAltaUseCase
+@inject UsuarioModificacionUseCase UsuarioModificacionUseCase
+@inject ListarUsuariosUseCase ListarUsuariosUseCase
+
+<PageTitle>@(_esNuevoUsuario ? "Agregar usuario" : "Modificar usuario")</PageTitle>
+
+<div class="contenedor-formulario">
+     @if (!string.IsNullOrEmpty(_mensajeError))
+    {
+    <div class="overlay">
+        <div class="modal-error">
+            <p>@_mensajeError</p>
+            <button class="btn btn-light" @onclick="() => _mensajeError = null">Aceptar</button>
+        </div>
+    </div>
+    }
+    <h3>@(_esNuevoUsuario ? "Agregar nuevo usuario" : $"Modificar usuario")</h3>
+
+    <div class="form-group">
+        <label>Nombre:</label>
+        <input type="text" @bind="_usuario.Nombre" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Apellido:</label>
+        <input type="text" @bind="_usuario.Apellido" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Email:</label>
+        <input type="text" @bind="_usuario.Email" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Contraseña:</label>
+        <input type="text" @bind="_usuario.Contraseña" class="form-control" />
+    </div>
+
+    <select class="form-control" @bind="_permisoSeleccionado">
+    <label>Permiso:</label>
+    <option disabled selected value="">-- Seleccione un permiso --</option>
+    @foreach (var permiso in PermisosDisponibles)
+    {
+        <option value="@permiso">@permiso</option>
+    }
+    </select>
+
+    <div class="form-buttons">
+        <button class="btn btn-primary" @onclick="Aceptar">
+            @(_esNuevoUsuario ? "Agregar" : "Guardar cambios")
+        </button>
+    </div>
+</div>
+
+<style>
+    .contenedor-formulario {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #fdfdfd;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    .contenedor-formulario h3 {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 8px;
+        font-size: 1rem;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .form-buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 10px 24px;
+        font-size: 1rem;
+        border-radius: 6px;
+    }
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-error {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    text-align: center;
+    max-width: 400px;
+}
+
+.modal-error p {
+    color: #000000;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.modal-error button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+}
+
+.modal-error button:hover {
+    background-color: #2980b9;
+}
+</style>
+
+@code {
+    
+    Usuario _usuario = new Usuario
+    {
+        Permisos = new List<IServicioAutorizacion.Permisos>() // Asegurate de inicializar la lista
+    };
+
+    [Parameter] public int? Id { get; set; }
+    bool _esNuevoUsuario = true;
+
+    string _mensajeError = "";
+    
+    IServicioAutorizacion.Permisos? _permisoSeleccionado;
+
+    List<IServicioAutorizacion.Permisos> PermisosDisponibles =>
+        Enum.GetValues(typeof(IServicioAutorizacion.Permisos))
+            .Cast<IServicioAutorizacion.Permisos>()
+            .Where(p => !_usuario.Permisos.Contains(p))
+            .ToList();
+
+    protected override void OnParametersSet()
+    {
+        if (Id != null)
+        {
+            var listaUsuarios = ListarUsuariosUseCase.Ejecutar();
+            foreach (Usuario u in listaUsuarios)
+            {
+                if (u.Id == Id)
+                {
+                    _esNuevoUsuario = false;
+                    _usuario = u;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            _usuario = new Usuario(); // reset por si se vuelve a navegar
+            _esNuevoUsuario = true;
+        }
+    }
+
+    void Aceptar()
+    {
+      try
+      {
+        if (_permisoSeleccionado.HasValue && !_usuario.Permisos.Contains(_permisoSeleccionado.Value))
+        {
+            _usuario.Permisos.Add(_permisoSeleccionado.Value);
+        }
+
+        if (_esNuevoUsuario)
+        {
+            UsuarioAltaUseCase.Ejecutar(_usuario, 1); 
+        }
+        else
+        {
+            UsuarioModificacionUseCase.Ejecutar(_usuario, 1);
+        }
+
+        _usuario = new Usuario();
+        Navegador.NavigateTo("/listadoUsuarios");
+
+      }
+    catch (Exception ex)
+    {
+        _mensajeError = ex.Message;
+    }
+    }
+}

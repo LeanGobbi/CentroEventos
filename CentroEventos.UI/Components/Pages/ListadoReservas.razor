@@ -1,0 +1,174 @@
+@page "/listadoReservas"
+<PageTitle>Listado de reservas</PageTitle>
+
+@rendermode InteractiveServer
+@inject NavigationManager Navegador;
+@inject ReservaBajaUseCase ReservaBajaUseCase
+@inject ListarReservasUseCase ListarReservasUseCase
+
+<DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+
+<div class="contenedor-tabla">
+@if (!string.IsNullOrEmpty(_mensajeError))
+{
+    <div class="overlay">
+        <div class="modal-error">
+            <p>@_mensajeError</p>
+            <button class="btn btn-light" @onclick="() => _mensajeError = null">Aceptar</button>
+        </div>
+    </div>
+}
+    <h2 class="titulo-tabla">Listado de reservas</h2>
+
+    <table class="table tabla-estilo">
+        <thead>
+            <tr>
+                <th>ID DE LA RESERVA</th>
+                <th>ID DE LA PERSONA</th>
+                <th>ID DEL EVENTO DEPORTIVO</th>
+                <th>FECHA DE ALTA DE LA RESERVA</th>
+                <th>ESTADO DE LA ASISTENCIA</th>
+                <th>ACCIÓN</th>
+              </tr>
+         </thead>
+      <tbody>
+            @foreach (var reserva in listaReservas)
+            {
+                 <tr>
+                    <td>@reserva.Id</td>
+                    <td>@reserva.PersonaId</td>
+                    <td>@reserva.EventoDeportivoId</td>
+                    <td>@reserva.FechaAltaReserva</td>
+                    <td>@reserva.EstadoAsistencia</td>
+                    <td>
+                        <div class="botones-accion">
+                            <button class="btn btn-primary" @onclick="() => Modificar(reserva)">Editar</button>
+                            <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(reserva)">Eliminar</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .contenedor-tabla {
+        max-width: 90%;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #fefefe;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .titulo-tabla {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .tabla-estilo th,
+    .tabla-estilo td {
+        padding: 12px 16px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .tabla-estilo th {
+        background-color: #f0f0f0;
+    }
+
+    .botones-accion {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .btn {
+        min-width: 90px;
+    }
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-error {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    text-align: center;
+    max-width: 400px;
+}
+
+.modal-error p {
+    color: #000000;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.modal-error button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+}
+
+.modal-error button:hover {
+    background-color: #2980b9;
+}
+</style>
+
+@code {
+    List<Reserva> listaReservas = new List<Reserva>();
+
+    string _mensajeError = "";
+
+    protected override void OnInitialized()
+    {
+        listaReservas = ListarReservasUseCase.Ejecutar();
+    }
+
+    DialogoConfirmacion dialogo = null!;
+    Reserva? _reservaParaEliminar = null;
+
+    private void ConfirmarEliminacion(Reserva reserva)
+    {
+        _reservaParaEliminar = reserva;
+        dialogo.Mensaje = $"¿Desea eliminar la reserva {reserva.Id}?";
+        dialogo.Mostrar();
+    }
+
+    private void Eliminar()
+    {
+      try
+      {
+        if (_reservaParaEliminar != null)
+        {
+            ReservaBajaUseCase.Ejecutar(_reservaParaEliminar.Id, 1);
+            Navegador.NavigateTo("/listadoReservas", forceLoad: true);
+        }
+      }
+      catch (Exception ex)
+      {
+        _mensajeError = ex.Message;
+      }
+    }
+
+    void Modificar(Reserva reserva)
+    {
+        Navegador.NavigateTo($"/reserva/{reserva.Id}");
+    }
+}

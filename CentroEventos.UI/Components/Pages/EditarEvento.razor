@@ -1,0 +1,201 @@
+@page "/evento/{Id:int?}"
+@rendermode InteractiveServer
+
+@using CentroEventos.UI.Components;
+@using CentroEventos.Aplicacion.Entidades;
+@using CentroEventos.Aplicacion.Interfaces;
+@using CentroEventos.Aplicacion.CasosDeUso;
+@inject NavigationManager Navegador;
+@inject EventoDeportivoAltaUseCase EventoDeportivoAltaUseCase
+@inject EventoDeportivoModificacionUseCase EventoDeportivoModificacionUseCase
+@inject ListarEventosDeportivosUseCase ListarEventosDeportivosUseCase
+
+<PageTitle>@(_esNuevoEvento ? "Agregar evento" : "Modificar evento")</PageTitle>
+
+<div class="contenedor-formulario">
+@if (!string.IsNullOrEmpty(_mensajeError))
+{
+    <div class="overlay">
+        <div class="modal-error">
+            <p>@_mensajeError</p>
+            <button class="btn btn-light" @onclick="() => _mensajeError = null">Aceptar</button>
+        </div>
+    </div>
+}
+    <h3>@(_esNuevoEvento ? "Agregar nuevo evento" : $"Modificar evento")</h3>
+
+    <div class="form-group">
+        <label>Nombre:</label>
+        <input type="text" @bind="_evento.Nombre" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Descripción:</label>
+        <input type="text" @bind="_evento.Descripcion" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Fecha y hora de inicio:</label>
+        <input type="datetime-local" @bind="_evento.FechaHoraInicio" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Duración en horas:</label>
+        <input type="number" @bind="_evento.DuracionHoras" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Cupo máximo de personas:</label>
+        <input type="number" @bind="_evento.CupoMaximo" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>ID del responsable:</label>
+        <input type="number" @bind="_evento.ResponsableId" class="form-control" />
+    </div>
+
+    <div class="form-buttons">
+        <button class="btn btn-primary" @onclick="Aceptar">
+            @(_esNuevoEvento ? "Agregar" : "Guardar cambios")
+        </button>
+    </div>
+</div>
+
+<style>
+    .contenedor-formulario {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #fdfdfd;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    .contenedor-formulario h3 {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 8px;
+        font-size: 1rem;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .form-buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 10px 24px;
+        font-size: 1rem;
+        border-radius: 6px;
+    }
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-error {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    text-align: center;
+    max-width: 400px;
+}
+
+.modal-error p {
+    color: #000000;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.modal-error button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+}
+
+.modal-error button:hover {
+    background-color: #2980b9;
+}
+</style>
+
+@code {
+    EventoDeportivo _evento = new EventoDeportivo();
+    [Parameter] public int? Id { get; set; }
+    bool _esNuevoEvento = true;
+    string _mensajeError = "";
+
+    protected override void OnParametersSet()
+    {
+        if (Id != null)
+        {
+            var listaEventos = ListarEventosDeportivosUseCase.Ejecutar();
+            foreach (EventoDeportivo e in listaEventos)
+            {
+                if (e.Id == Id)
+                {
+                    _esNuevoEvento = false;
+                    _evento = e;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            _evento = new EventoDeportivo(); // reset por si se vuelve a navegar
+            _esNuevoEvento = true;
+        }
+    }
+
+  void Aceptar()
+{
+    try
+    {
+        if (_esNuevoEvento)
+        {
+            EventoDeportivoAltaUseCase.Ejecutar(_evento, 1); // usuarioId hardcodeado
+        }
+        else
+        {
+            EventoDeportivoModificacionUseCase.Ejecutar(_evento, 1);
+        }
+
+        _evento = new EventoDeportivo();
+        Navegador.NavigateTo("/listadoEventos");
+    }
+    catch (Exception ex)
+    {
+        _mensajeError = ex.Message;
+    }
+   }
+}

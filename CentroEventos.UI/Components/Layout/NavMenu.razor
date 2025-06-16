@@ -1,0 +1,54 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Centro Eventos</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Menu principal
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/evento/");">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Editar evento
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/listadoEventos">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Listar eventos
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/usuario/");">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Editar usuario
+            </NavLink>
+        </div>
+
+       <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/listadoUsuarios/");">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Listar usuarios
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/reserva/");">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Editar reserva
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/listadoReservas/");">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Listar reservas
+            </NavLink>
+        </div>
+    </nav>
+</div>
+

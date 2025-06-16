@@ -1,0 +1,192 @@
+@page "/reserva/{Id:int?}"
+@rendermode InteractiveServer
+
+@using CentroEventos.UI.Components;
+@using CentroEventos.Aplicacion.Entidades;
+@using CentroEventos.Aplicacion.Interfaces;
+@using CentroEventos.Aplicacion.CasosDeUso;
+@inject NavigationManager Navegador;
+@inject ReservaAltaUseCase ReservaAltaUseCase
+@inject ReservaModificacionUseCase ReservaModificacionUseCase
+@inject ListarReservasUseCase ListarReservasUseCase
+
+<PageTitle>@(_esNuevaReserva ? "Agregar reserva" : "Modificar reserva")</PageTitle>
+
+<div class="contenedor-formulario">
+    @if (!string.IsNullOrEmpty(_mensajeError))
+{
+    <div class="overlay">
+        <div class="modal-error">
+            <p>@_mensajeError</p>
+            <button class="btn btn-light" @onclick="() => _mensajeError = null">Aceptar</button>
+        </div>
+    </div>
+}
+    <h3>@(_esNuevaReserva ? "Agregar nueva reserva" : $"Modificar reserva")</h3>
+
+    <div class="form-group">
+        <label>Id de la persona:</label>
+        <input type="number" @bind="_reserva.PersonaId" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Id del evento:</label>
+        <input type="number" @bind="_reserva.EventoDeportivoId" class="form-control" />
+    </div>
+
+    <div class="form-group">
+    <label>Estado de asistencia:</label>
+    <select @bind="_reserva.EstadoAsistencia" class="form-control">
+        @foreach (var estado in Enum.GetValues(typeof(Reserva.Estados)))
+        {
+            <option value="@estado">@estado</option>
+        }
+    </select>
+    </div>
+
+    <div class="form-buttons">
+        <button class="btn btn-primary" @onclick="Aceptar">
+            @(_esNuevaReserva ? "Agregar" : "Guardar cambios")
+        </button>
+    </div>
+</div>
+
+<style>
+    .contenedor-formulario {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #fdfdfd;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    .contenedor-formulario h3 {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 8px;
+        font-size: 1rem;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .form-buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 10px 24px;
+        font-size: 1rem;
+        border-radius: 6px;
+    }
+    .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-error {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    text-align: center;
+    max-width: 400px;
+}
+
+.modal-error p {
+    color: #000000;
+    font-weight: bold;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.modal-error button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+}
+
+.modal-error button:hover {
+    background-color: #2980b9;
+}
+</style>
+
+@code {
+    Reserva _reserva = new Reserva();
+    [Parameter] public int? Id { get; set; }
+    bool _esNuevaReserva = true;
+    string _mensajeError = "";
+    protected override void OnParametersSet()
+    {
+        if (Id != null)
+        {
+            var listaReservas = ListarReservasUseCase.Ejecutar();
+            foreach (Reserva r in listaReservas)
+            {
+                if (r.Id == Id)
+                {
+                    _esNuevaReserva = false;
+                    _reserva = r;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            _reserva = new Reserva(); // reset por si se vuelve a navegar
+            _esNuevaReserva = true;
+        }
+    }
+
+    void Aceptar()
+    {
+      try
+      {
+        _reserva.FechaAltaReserva = DateTime.Now;
+        if (_esNuevaReserva)
+        {
+            ReservaAltaUseCase.Ejecutar(_reserva, 1); 
+        }
+        else
+        {
+            ReservaModificacionUseCase.Ejecutar(_reserva, 1);
+        }
+
+        _reserva= new Reserva();
+        Navegador.NavigateTo("/listadoReservas");
+
+    }
+    catch (Exception ex)
+    {
+        _mensajeError = ex.Message;
+    }
+    }
+}

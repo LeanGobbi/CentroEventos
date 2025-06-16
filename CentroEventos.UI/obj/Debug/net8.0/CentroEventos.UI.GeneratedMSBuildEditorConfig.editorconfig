@@ -1,0 +1,87 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = CentroEventos.UI
+build_property.RootNamespace = CentroEventos.UI
+build_property.ProjectDir = /home/leandro/.NET/CentroEventos/CentroEventos.UI/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /home/leandro/.NET/CentroEventos/CentroEventos.UI
+build_property._RazorSourceGeneratorDebug = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/App.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9BcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Pages/EditarEvento.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FZGl0YXJFdmVudG8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Pages/EditarReserva.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FZGl0YXJSZXNlcnZhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Pages/EditarUsuario.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FZGl0YXJVc3VhcmlvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Pages/Error.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9FcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Pages/ListadoEventos.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9MaXN0YWRvRXZlbnRvcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Pages/ListadoReservas.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9MaXN0YWRvUmVzZXJ2YXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Pages/ListadoUsuarios.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9MaXN0YWRvVXN1YXJpb3MucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Pages/Registro.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9SZWdpc3Ryby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Pages/Weather.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9XZWF0aGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Routes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9Sb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9fSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/DialogoConfirmacion.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9EaWFsb2dvQ29uZmlybWFjaW9uLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-3et4jrmtah
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Formulario.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9Gb3JtdWxhcmlvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-05wt7e80xe
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTWFpbkxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-1fi618u8xd
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9MYXlvdXQvTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-yi7ef7lb4i
+
+[/home/leandro/.NET/CentroEventos/CentroEventos.UI/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-ydm72fqq40
