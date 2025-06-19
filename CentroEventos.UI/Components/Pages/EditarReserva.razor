@@ -9,6 +9,12 @@
 @inject ReservaAltaUseCase ReservaAltaUseCase
 @inject ReservaModificacionUseCase ReservaModificacionUseCase
 @inject ListarReservasUseCase ListarReservasUseCase
+@inject UsuarioLogueadoUseCase UsuarioLogueadoUseCase
+@inject PoseeElPermisoUseCase PoseeElPermisoUseCase 
+@inject UsuarioActualUseCase UsuarioActualUseCase 
+
+<Sidebar />
+<Header />
 
 <PageTitle>@(_esNuevaReserva ? "Agregar reserva" : "Modificar reserva")</PageTitle>
 
@@ -54,6 +60,7 @@
 <style>
     .contenedor-formulario {
         max-width: 600px;
+         margin-left: 90px auto;
         margin: 40px auto;
         padding: 30px;
         background-color: #fdfdfd;
@@ -141,6 +148,8 @@
 
 @code {
     Reserva _reserva = new Reserva();
+    int _idActualUsuario;
+    bool _puedeModificarReserva = false;
     [Parameter] public int? Id { get; set; }
     bool _esNuevaReserva = true;
     string _mensajeError = "";
@@ -173,11 +182,11 @@
         _reserva.FechaAltaReserva = DateTime.Now;
         if (_esNuevaReserva)
         {
-            ReservaAltaUseCase.Ejecutar(_reserva, 1); 
+            ReservaAltaUseCase.Ejecutar(_reserva, _idActualUsuario); 
         }
         else
         {
-            ReservaModificacionUseCase.Ejecutar(_reserva, 1);
+            ReservaModificacionUseCase.Ejecutar(_reserva, _idActualUsuario);
         }
 
         _reserva= new Reserva();
@@ -188,5 +197,16 @@
     {
         _mensajeError = ex.Message;
     }
+}
+
+    protected override void OnInitialized()
+    {
+        if (UsuarioLogueadoUseCase.Ejecutar()) {
+            
+            _idActualUsuario = (UsuarioActualUseCase.Ejecutar()).Id;
+            _puedeModificarReserva = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.ReservaModificacion);
+
+        }
+
     }
 }

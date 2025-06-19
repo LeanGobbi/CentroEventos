@@ -9,9 +9,9 @@ public class UsuarioValidador(IRepositorioUsuario repoUsuario, IRepositorioEvent
     public bool ValidarFormatoCampos(Usuario datosUsuario, out string mensajeError)
     {
         mensajeError = "";
-        if (string.IsNullOrWhiteSpace(datosUsuario.Nombre) || string.IsNullOrWhiteSpace(datosUsuario.Apellido) || string.IsNullOrWhiteSpace(datosUsuario.Email))
+        if (string.IsNullOrWhiteSpace(datosUsuario.Nombre) || string.IsNullOrWhiteSpace(datosUsuario.Apellido) || string.IsNullOrWhiteSpace(datosUsuario.Email) || string.IsNullOrWhiteSpace(datosUsuario.Contraseña))
         {
-            mensajeError = "ERROR: Los campos nombre, apellido y email son obligatorios y deben completarse. Intente nuevamente. \n";
+            mensajeError = "ERROR: Los campos son obligatorios y deben completarse. Intente nuevamente. \n";
         }
 
         if (!datosUsuario.Nombre.All(char.IsLetter))

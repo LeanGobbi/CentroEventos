@@ -15,6 +15,7 @@ public class ReservaAltaUseCase (IRepositorioReserva repo, ReservaValidador vali
             mensajeError = "ERROR: El usuario no tiene permiso para realizar esta operación.";
             throw new FalloAutorizacionException(mensajeError);
         }
+        
 
         if (!validadorR.ValidarPersonaYEventoAsociados(datosReserva, out mensajeError))
         {

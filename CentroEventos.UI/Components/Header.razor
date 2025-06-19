@@ -1,0 +1,65 @@
+
+
+@inject CerrarSesionUseCase CerrarSesionUseCase
+@inject UsuarioLogueadoUseCase UsuarioLogueadoUseCase
+@inject UsuarioActualUseCase UsuarioActualUseCase
+@inject NavigationManager Navegador;
+
+@rendermode InteractiveServer
+
+<div class="top-row px-4"
+     style="background-color: #240f4d;
+            color: white;
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            margin-top: 0;
+            padding-top: 0;
+            position: relative; 
+            top: -1.3rem;
+            left: 2.5rem;
+            width: 95vw;
+            z-index: 1;"> 
+
+    @if (_usuarioLogueado)
+    {
+        <div style="display: flex; gap: 2rem;">
+        <button class="btn btn-outline-light d-flex gap: 1rem; align-items-center" @onclick="() => Modificar(_usuarioActual)" style="gap: 0.5rem;"> <i class="bi bi-person-circle"></i>
+          @_usuarioActual?.Nombre @_usuarioActual?.Apellido
+       </button>
+
+       <button class="btn btn-outline-light d-flex gap: 1rem; align-items-center" @onclick="() => Cerrar()" style="gap: 0.5rem;"> <i class="bi bi-box-arrow-right"></i> Cerrar sesion
+       </button>
+       </div>
+    } 
+
+</div>
+
+
+@code {
+
+    bool _usuarioLogueado = false;
+    Usuario? _usuarioActual;
+    void Modificar(Usuario usuario)
+    {
+        Navegador.NavigateTo($"/usuario/{usuario.Id}");
+    }
+
+     void Cerrar()
+    {
+        CerrarSesionUseCase.Ejecutar();
+        Navegador.NavigateTo("/");
+    }
+
+      protected override void OnInitialized()
+    {
+        if (UsuarioLogueadoUseCase.Ejecutar()) {
+            
+            _usuarioLogueado = true;
+            _usuarioActual = UsuarioActualUseCase.Ejecutar();
+
+        }
+
+    }    
+}
+

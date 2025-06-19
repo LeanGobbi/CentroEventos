@@ -92,26 +92,5 @@ public class EventoDeportivoValidador(IRepositorioUsuario repoUsuario, IReposito
         return mensajeError == "";
     }
 
-    public bool ValidarFechaFuturaEvento(int idEvento, out string mensajeError)
-    {
-        mensajeError = "";
-        DateTime fecha = DateTime.MinValue;
-        var listarEventos = new ListarEventosDeportivosUseCase(repoEvento);
-        var listaE = listarEventos.Ejecutar();
-        foreach (EventoDeportivo e in listaE)
-        {
-            if (e.Id == idEvento)
-            {
-                fecha = e.FechaHoraInicio;
-                break;
-            }
-        }
-        if (fecha >= DateTime.Now)
-        {
-            mensajeError = "ERROR: La fecha de realización del evento es futura. Intente nuevamente. \n";
-        }
-        return mensajeError == "";
-    }
-
 }
 

@@ -14,11 +14,6 @@ public class CentroEventosContext : DbContext
   }
       protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Ignorar la propiedad Permisos para que EF no intente mapearla a columna
-        modelBuilder.Entity<Usuario>().Ignore(u => u.Permisos);
-
-        // No es estrictamente necesario mapear PermisosSerializados si coincide con la propiedad
-        // y la columna, pero si querés podés definirlo explícitamente
-        // modelBuilder.Entity<Usuario>().Property(u => u.PermisosSerializados).HasColumnName("PermisosSerializados");
+        modelBuilder.Entity<Usuario>().Ignore(u => u.Permisos); //ignora la columna permisos
     }
 }

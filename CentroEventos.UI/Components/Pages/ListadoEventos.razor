@@ -1,5 +1,5 @@
-@page "/listadoEventos"
-<PageTitle>Listado de eventos</PageTitle>
+@page "/listadoEventosTotales/"
+<PageTitle>Listado de eventos totales</PageTitle>
 
 @rendermode InteractiveServer
 @inject NavigationManager Navegador;
@@ -7,8 +7,15 @@
 @inject EventoDeportivoBajaUseCase EventoDeportivoBajaUseCase 
 
 <DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+@inject UsuarioLogueadoUseCase UsuarioLogueadoUseCase
+@inject PoseeElPermisoUseCase PoseeElPermisoUseCase 
+@inject UsuarioActualUseCase UsuarioActualUseCase 
+
+<Sidebar />
+<Header />
 
 <div class="contenedor-tabla">
+
 @if (!string.IsNullOrEmpty(_mensajeError))
 {
     <div class="overlay">
@@ -18,7 +25,7 @@
         </div>
     </div>
 }
-    <h2 class="titulo-tabla">Listado de eventos</h2>
+    <h2 class="titulo-tabla">Listado de eventos totales</h2>
 
     <table class="table tabla-estilo">
         <thead>
@@ -30,7 +37,11 @@
                 <th>DURACIÓN (hs)</th>
                 <th>CUPO MÁXIMO</th>
                 <th>RESPONSABLE ID</th>
-                <th>ACCIÓN</th>
+
+@if ((_puedeModificarEvento) || (_puedeEliminarEvento)) 
+{
+    <th>ACCIÓN</th>
+}
             </tr>
         </thead>
         <tbody>
@@ -46,9 +57,18 @@
                     <td>@evento.ResponsableId</td>
                     <td>
                         <div class="botones-accion">
+
+                            @if (_puedeModificarEvento) 
+                            {
                             <button class="btn btn-primary" @onclick="() => Modificar(evento)">Editar</button>
-                            <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(evento)">Eliminar</button>
-                        </div>
+                            }
+                            @if (_puedeEliminarEvento) 
+                            {
+                              <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(evento)">Eliminar</button>
+                            }
+                           
+                        </div> 
+                        
                     </td>
                 </tr>
             }
@@ -61,6 +81,8 @@
         max-width: 90%;
         margin: 30px auto;
         padding: 20px;
+         margin-left: 60px auto;
+        padding-left: 210px;
         background-color: #fefefe;
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -138,11 +160,9 @@
 @code {
     List<EventoDeportivo> listaEventos = new List<EventoDeportivo>();
     string _mensajeError = "";
-    protected override void OnInitialized()
-    {
-        listaEventos = ListarEventosDeportivosUseCase.Ejecutar();
-    }
-
+    int _idActualUsuario;
+    bool _puedeModificarEvento = false;
+    bool _puedeEliminarEvento = false;
     DialogoConfirmacion dialogo = null!;
     EventoDeportivo? _eventoParaEliminar = null;
 
@@ -159,8 +179,8 @@
       {
         if (_eventoParaEliminar != null)
         {
-            EventoDeportivoBajaUseCase.Ejecutar(_eventoParaEliminar.Id, 1);
-            Navegador.NavigateTo("/listadoEventos", forceLoad: true);
+            EventoDeportivoBajaUseCase.Ejecutar(_eventoParaEliminar.Id, _idActualUsuario);
+            Navegador.NavigateTo("/listadoEventos");
         }
       }
       catch (Exception ex)
@@ -173,4 +193,19 @@
     {
         Navegador.NavigateTo($"/evento/{evento.Id}");
     }
+
+    protected override void OnInitialized()
+    {
+        listaEventos = ListarEventosDeportivosUseCase.Ejecutar();
+
+        if (UsuarioLogueadoUseCase.Ejecutar()) {
+            
+            _idActualUsuario = (UsuarioActualUseCase.Ejecutar()).Id;
+            _puedeModificarEvento = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.EventoModificacion);
+            _puedeEliminarEvento = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.EventoBaja);
+
+        }
+
+    }    
+
 }

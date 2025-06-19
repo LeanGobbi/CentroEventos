@@ -5,6 +5,7 @@
 /home/leandro/.NET/CentroEventos/CentroEventos.Aplicacion/obj/Debug/net8.0/CentroEventos.Aplicacion.AssemblyInfoInputs.cache
 /home/leandro/.NET/CentroEventos/CentroEventos.Aplicacion/obj/Debug/net8.0/CentroEventos.Aplicacion.AssemblyInfo.cs
 /home/leandro/.NET/CentroEventos/CentroEventos.Aplicacion/obj/Debug/net8.0/CentroEventos.Aplicacion.csproj.CoreCompileInputs.cache
+/home/leandro/.NET/CentroEventos/CentroEventos.Aplicacion/obj/Debug/net8.0/CentroEventos.Aplicacion.sourcelink.json
 /home/leandro/.NET/CentroEventos/CentroEventos.Aplicacion/obj/Debug/net8.0/CentroEventos.Aplicacion.dll
 /home/leandro/.NET/CentroEventos/CentroEventos.Aplicacion/obj/Debug/net8.0/refint/CentroEventos.Aplicacion.dll
 /home/leandro/.NET/CentroEventos/CentroEventos.Aplicacion/obj/Debug/net8.0/CentroEventos.Aplicacion.pdb

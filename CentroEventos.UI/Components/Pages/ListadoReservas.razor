@@ -2,11 +2,19 @@
 <PageTitle>Listado de reservas</PageTitle>
 
 @rendermode InteractiveServer
+
+@using CentroEventos.Aplicacion.Interfaces;
 @inject NavigationManager Navegador;
 @inject ReservaBajaUseCase ReservaBajaUseCase
 @inject ListarReservasUseCase ListarReservasUseCase
 
 <DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+@inject UsuarioLogueadoUseCase UsuarioLogueadoUseCase
+@inject PoseeElPermisoUseCase PoseeElPermisoUseCase 
+@inject UsuarioActualUseCase UsuarioActualUseCase 
+
+<Sidebar />
+<Header />
 
 <div class="contenedor-tabla">
 @if (!string.IsNullOrEmpty(_mensajeError))
@@ -28,7 +36,11 @@
                 <th>ID DEL EVENTO DEPORTIVO</th>
                 <th>FECHA DE ALTA DE LA RESERVA</th>
                 <th>ESTADO DE LA ASISTENCIA</th>
-                <th>ACCIÓN</th>
+                @if ((_puedeModificarReserva) || (_puedeEliminarReserva)) 
+                {
+                  <th>ACCIÓN</th>
+                }
+
               </tr>
          </thead>
       <tbody>
@@ -41,10 +53,17 @@
                     <td>@reserva.FechaAltaReserva</td>
                     <td>@reserva.EstadoAsistencia</td>
                     <td>
-                        <div class="botones-accion">
-                            <button class="btn btn-primary" @onclick="() => Modificar(reserva)">Editar</button>
-                            <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(reserva)">Eliminar</button>
-                        </div>
+                          <div class="botones-accion">
+
+                            @if (_puedeModificarReserva) 
+                            {
+                                <button class="btn btn-primary" @onclick="() => Modificar(reserva)">Editar</button>
+                            }
+                              @if (_puedeEliminarReserva) 
+                            {
+                                <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(reserva)">Eliminar</button>
+                            }
+                          </div>
                     </td>
                 </tr>
             }
@@ -57,6 +76,8 @@
         max-width: 90%;
         margin: 30px auto;
         padding: 20px;
+         margin-left: 60px auto;
+        padding-left: 190px;
         background-color: #fefefe;
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -133,14 +154,10 @@
 
 @code {
     List<Reserva> listaReservas = new List<Reserva>();
-
+    int _idActualUsuario;
+    bool _puedeModificarReserva = false;
+    bool _puedeEliminarReserva= false;
     string _mensajeError = "";
-
-    protected override void OnInitialized()
-    {
-        listaReservas = ListarReservasUseCase.Ejecutar();
-    }
-
     DialogoConfirmacion dialogo = null!;
     Reserva? _reservaParaEliminar = null;
 
@@ -157,8 +174,8 @@
       {
         if (_reservaParaEliminar != null)
         {
-            ReservaBajaUseCase.Ejecutar(_reservaParaEliminar.Id, 1);
-            Navegador.NavigateTo("/listadoReservas", forceLoad: true);
+            ReservaBajaUseCase.Ejecutar(_reservaParaEliminar.Id, _idActualUsuario);
+            Navegador.NavigateTo("/listadoReservas");
         }
       }
       catch (Exception ex)
@@ -171,4 +188,18 @@
     {
         Navegador.NavigateTo($"/reserva/{reserva.Id}");
     }
+
+    protected override void OnInitialized()
+    {
+        listaReservas = ListarReservasUseCase.Ejecutar();
+
+        if (UsuarioLogueadoUseCase.Ejecutar()) {
+            
+            _idActualUsuario = (UsuarioActualUseCase.Ejecutar()).Id;
+            _puedeModificarReserva = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.ReservaModificacion);
+            _puedeEliminarReserva = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.ReservaBaja);
+
+        }
+
+    }   
 }

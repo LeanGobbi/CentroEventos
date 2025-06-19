@@ -1,3 +1,10 @@
+/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.csproj.AssemblyReference.cache
+/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.GeneratedMSBuildEditorConfig.editorconfig
+/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.AssemblyInfoInputs.cache
+/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.AssemblyInfo.cs
+/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.csproj.CoreCompileInputs.cache
+/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.MvcApplicationPartsAssemblyInfo.cache
+/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.sourcelink.json
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/bin/Debug/net8.0/appsettings.Development.json
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/bin/Debug/net8.0/appsettings.json
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/bin/Debug/net8.0/CentroEventos.UI.staticwebassets.runtime.json
@@ -54,12 +61,6 @@
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/bin/Debug/net8.0/CentroEventos.Repositorios.dll
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/bin/Debug/net8.0/CentroEventos.Aplicacion.pdb
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/bin/Debug/net8.0/CentroEventos.Repositorios.pdb
-/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.csproj.AssemblyReference.cache
-/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.GeneratedMSBuildEditorConfig.editorconfig
-/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.AssemblyInfoInputs.cache
-/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.AssemblyInfo.cs
-/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.csproj.CoreCompileInputs.cache
-/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.MvcApplicationPartsAssemblyInfo.cache
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/staticwebassets.build.json
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/staticwebassets.development.json
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/staticwebassets/msbuild.CentroEventos.UI.Microsoft.AspNetCore.StaticWebAssets.props
@@ -68,10 +69,12 @@
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.CentroEventos.UI.props
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/staticwebassets.pack.json
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/scopedcss/Components/DialogoConfirmacion.razor.rz.scp.css
-/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/scopedcss/Components/Formulario.razor.rz.scp.css
+/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/scopedcss/Components/FormUsuario.razor.rz.scp.css
+/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/scopedcss/Components/Header.razor.rz.scp.css
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/scopedcss/Components/Layout/MainLayout.razor.rz.scp.css
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/scopedcss/Components/Layout/NavMenu.razor.rz.scp.css
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/scopedcss/Components/Pages/Home.razor.rz.scp.css
+/home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/scopedcss/Components/Sidebar.razor.rz.scp.css
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/scopedcss/bundle/CentroEventos.UI.styles.css
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/scopedcss/projectbundle/CentroEventos.UI.bundle.scp.css
 /home/leandro/.NET/CentroEventos/CentroEventos.UI/obj/Debug/net8.0/CentroEventos.UI.csproj.CopyComplete

@@ -1,0 +1,105 @@
+@using CentroEventos.UI.Components
+@inject NavigationManager Navegador;
+
+@rendermode InteractiveServer
+@inject PoseeElPermisoUseCase PoseeElPermisoUseCase
+@inject UsuarioLogueadoUseCase UsuarioLogueadoUseCase
+@inject UsuarioActualUseCase UsuarioActualUseCase
+
+<div class="sidebar-fija">
+
+ @if (!_usuarioLogueado) {
+
+    <NavLink class="btn btn-outline-light d-flex align-items-center"
+           href="/"
+           Match="NavLinkMatch.All"
+           style="gap: 1rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
+      <i class="bi bi-house-door"></i> Iniciar sesión
+  </NavLink>
+  
+} else {
+
+if (_puedeAgregarUsuario){
+  <NavLink class="btn btn-outline-light d-flex align-items-center"
+         href="/usuario/"
+         Match="NavLinkMatch.All"
+         style="gap: 1rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
+    <i class="bi bi-plus-circle"></i> Agregar usuario
+</NavLink>
+}
+
+  <NavLink class="btn btn-outline-light d-flex align-items-center"
+         href="/listadoUsuarios/"
+         Match="NavLinkMatch.All"
+         style="gap: 1rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
+    <i class="bi bi-list-ul"></i> Listar usuarios
+</NavLink>
+
+  if (_puedeAgregarEvento){
+
+  <NavLink class="btn btn-outline-light d-flex align-items-center"
+         href="/evento/"
+         Match="NavLinkMatch.All"
+         style="gap: 1rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
+    <i class="bi bi-plus-circle"></i> Agregar evento
+</NavLink>
+}
+
+  <NavLink class="btn btn-outline-light d-flex align-items-center"
+         href="/listadoEventosDisponibles/"
+         Match="NavLinkMatch.All"
+         style="gap: 1rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
+    <i class="bi bi-list-ul"></i> Listar eventos disponibles
+</NavLink>
+
+  <NavLink class="btn btn-outline-light d-flex align-items-center"
+         href="/listadoEventosTotales/"
+         Match="NavLinkMatch.All"
+         style="gap: 1rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
+    <i class="bi bi-list-ul"></i> Listar eventos totales
+</NavLink>
+
+  <NavLink class="btn btn-outline-light d-flex align-items-center"
+         href="/listadoEventosPasados/"
+         Match="NavLinkMatch.All"
+         style="gap: 1rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
+    <i class="bi bi-list-ul"></i> Listar eventos pasados
+</NavLink>
+
+if (_puedeAgregarReserva){
+  <NavLink class="btn btn-outline-light d-flex align-items-center"
+         href="/reserva/"
+         Match="NavLinkMatch.All"
+         style="gap: 1rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
+    <i class="bi bi-plus-circle"></i> Agregar reserva
+</NavLink>
+}
+
+  <NavLink class="btn btn-outline-light d-flex align-items-center"
+         href="/listadoReservas/"
+         Match="NavLinkMatch.All"
+         style="gap: 1rem; padding: 0.5rem 1rem; margin-bottom: 1.5rem;">
+    <i class="bi bi-list-ul"></i> Listar reservas
+</NavLink>
+}
+
+</div>
+
+@code {
+      bool _usuarioLogueado = false;
+      int _idActualUsuario;
+      bool _puedeAgregarEvento = false;
+      bool _puedeAgregarReserva = false;
+      bool _puedeAgregarUsuario = false;
+      protected override void OnInitialized()
+    {
+        if (UsuarioLogueadoUseCase.Ejecutar()) {
+    
+            _usuarioLogueado = true;
+            _idActualUsuario = (UsuarioActualUseCase.Ejecutar()).Id;
+             _puedeAgregarEvento = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.EventoAlta);
+             _puedeAgregarReserva = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.ReservaAlta);
+             _puedeAgregarUsuario = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.UsuarioAlta);
+       }
+    }  
+  }

@@ -9,6 +9,13 @@
 @inject UsuarioAltaUseCase UsuarioAltaUseCase
 @inject UsuarioModificacionUseCase UsuarioModificacionUseCase
 @inject ListarUsuariosUseCase ListarUsuariosUseCase
+@inject PrimerUsuarioUseCase PrimerUsuarioUseCase
+@inject UsuarioLogueadoUseCase UsuarioLogueadoUseCase
+@inject PoseeElPermisoUseCase PoseeElPermisoUseCase 
+@inject UsuarioActualUseCase UsuarioActualUseCase 
+
+<Sidebar />
+<Header />
 
 <PageTitle>@(_esNuevoUsuario ? "Agregar usuario" : "Modificar usuario")</PageTitle>
 
@@ -41,18 +48,24 @@
 
     <div class="form-group">
         <label>Contraseña:</label>
-        <input type="text" @bind="_usuario.Contraseña" class="form-control" />
+        <input type="text" @bind="_nuevaContraseña" class="form-control" />
     </div>
 
-    <select class="form-control" @bind="_permisoSeleccionado">
-    <label>Permiso:</label>
-    <option disabled selected value="">-- Seleccione un permiso --</option>
-    @foreach (var permiso in PermisosDisponibles)
-    {
-        <option value="@permiso">@permiso</option>
-    }
-    </select>
-
+  @if (!_esPrimerUsuario)
+     {
+        if ((_puedeModificarUsuario) && (_idActualUsuario != Id)) {
+           <div class="form-group"> 
+          <label>Agregar un permiso:</label>
+          <select class="form-control" @bind="_permisoSeleccionado">
+          <option disabled selected value="">-- Seleccione un permiso --</option>
+          @foreach (var permiso in PermisosDisponibles)
+        {
+          <option value="@permiso">@permiso</option>
+      }
+      </select>
+      </div>  
+      }
+  }
     <div class="form-buttons">
         <button class="btn btn-primary" @onclick="Aceptar">
             @(_esNuevoUsuario ? "Agregar" : "Guardar cambios")
@@ -63,6 +76,7 @@
 <style>
     .contenedor-formulario {
         max-width: 600px;
+         margin-left: 90px auto;
         margin: 40px auto;
         padding: 30px;
         background-color: #fdfdfd;
@@ -152,13 +166,16 @@
     
     Usuario _usuario = new Usuario
     {
-        Permisos = new List<IServicioAutorizacion.Permisos>() // Asegurate de inicializar la lista
+        Permisos = new List<IServicioAutorizacion.Permisos>() 
     };
 
+    bool _esPrimerUsuario;
+    int _idActualUsuario;
+    bool _puedeModificarUsuario = false;
     [Parameter] public int? Id { get; set; }
     bool _esNuevoUsuario = true;
-
     string _mensajeError = "";
+    private string _nuevaContraseña = "";
     
     IServicioAutorizacion.Permisos? _permisoSeleccionado;
 
@@ -179,13 +196,12 @@
                 {
                     _esNuevoUsuario = false;
                     _usuario = u;
-                    break;
                 }
             }
         }
         else
         {
-            _usuario = new Usuario(); // reset por si se vuelve a navegar
+            _usuario = new Usuario();
             _esNuevoUsuario = true;
         }
     }
@@ -198,14 +214,27 @@
         {
             _usuario.Permisos.Add(_permisoSeleccionado.Value);
         }
-
+        
+        @if (!string.IsNullOrEmpty(_nuevaContraseña)){
+           _usuario.Contraseña = SHA_256.ObtenerSHA256(_nuevaContraseña);
+        } else {
+           _usuario.Contraseña = "";
+        }
+        
         if (_esNuevoUsuario)
         {
-            UsuarioAltaUseCase.Ejecutar(_usuario, 1); 
+             if (_esPrimerUsuario) {
+                _usuario.PermisosSerializados = string.Join(",", Enum.GetValues(typeof(IServicioAutorizacion.Permisos)).Cast<IServicioAutorizacion.Permisos>());
+                UsuarioAltaUseCase.Ejecutar(_usuario, 1); 
+            }
+            else {
+                UsuarioAltaUseCase.Ejecutar(_usuario, _idActualUsuario); 
+            
+             } 
         }
         else
         {
-            UsuarioModificacionUseCase.Ejecutar(_usuario, 1);
+            UsuarioModificacionUseCase.Ejecutar(_usuario, _idActualUsuario);
         }
 
         _usuario = new Usuario();
@@ -216,5 +245,18 @@
     {
         _mensajeError = ex.Message;
     }
+  }
+     protected override void OnInitialized()
+    {
+        _esPrimerUsuario = PrimerUsuarioUseCase.Ejecutar();
+
+        if (UsuarioLogueadoUseCase.Ejecutar()) {
+            
+            _idActualUsuario = (UsuarioActualUseCase.Ejecutar()).Id;
+            _puedeModificarUsuario = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.UsuarioModificacion);
+
+        }
+
     }
-}
+} 
+    

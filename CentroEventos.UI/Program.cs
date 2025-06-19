@@ -1,3 +1,4 @@
+
 using CentroEventos.UI.Components;
 using CentroEventos.Aplicacion.Interfaces;
 using CentroEventos.Aplicacion.CasosDeUso;
@@ -11,11 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-
 builder.Services.AddTransient<UsuarioAltaUseCase>();
 builder.Services.AddTransient<UsuarioBajaUseCase>();
 builder.Services.AddTransient<UsuarioModificacionUseCase>();
 builder.Services.AddTransient<ListarUsuariosUseCase>();
+builder.Services.AddTransient<PrimerUsuarioUseCase>();
 
 builder.Services.AddTransient<EventoDeportivoAltaUseCase>();
 builder.Services.AddTransient<EventoDeportivoBajaUseCase>();
@@ -29,7 +30,12 @@ builder.Services.AddTransient<ListarReservasUseCase>();
 
 builder.Services.AddTransient<ListarAsistenciaAEventoUseCase>();
 builder.Services.AddTransient<ListarEventosConCupoDisponibleUseCase>();
-builder.Services.AddTransient<ServicioAutorizacionUseCase>();
+builder.Services.AddTransient<PoseeElPermisoUseCase>();
+
+builder.Services.AddTransient<UsuarioActualUseCase>();
+builder.Services.AddTransient<UsuarioLogueadoUseCase>();
+builder.Services.AddTransient<IniciarSesionUseCase>();
+builder.Services.AddTransient<CerrarSesionUseCase>();
 
 builder.Services.AddTransient<EventoDeportivoValidador>();
 builder.Services.AddTransient<ReservaValidador>();
@@ -38,12 +44,8 @@ builder.Services.AddTransient<UsuarioValidador>();
 builder.Services.AddScoped<IRepositorioEventoDeportivo, RepositorioEventoDeportivo>();
 builder.Services.AddScoped<IRepositorioReserva, RepositorioReserva>();
 builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
+builder.Services.AddScoped<ISesionUsuario, ImplementacionSesionUsuario>();
 builder.Services.AddScoped<IServicioAutorizacion, ImplementacionServicioAutorizacion>();
-
-
-
-
-
 
 var app = builder.Build();
 

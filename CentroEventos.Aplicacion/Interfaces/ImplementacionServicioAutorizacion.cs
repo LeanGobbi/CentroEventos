@@ -1,15 +1,13 @@
 namespace CentroEventos.Aplicacion.Interfaces;
 
-public class ImplementacionServicioAutorizacion : IServicioAutorizacion
+public class ImplementacionServicioAutorizacion(IRepositorioUsuario repoUsuario) : IServicioAutorizacion
 {
-    public bool PoseeElPermiso (int IdUsuario, IServicioAutorizacion.Permisos Permiso)
+    public bool PoseeElPermiso(int IdUsuario, IServicioAutorizacion.Permisos Permiso)
     {
-        if (IdUsuario == 1)
-        {
-            return true;
-        }
-        else
-            return false;
+        var usuario = repoUsuario.ListarUsuarios().FirstOrDefault(u => u.Id == IdUsuario);
+
+        return usuario.Permisos.Contains(Permiso);
+
     }
 
 }

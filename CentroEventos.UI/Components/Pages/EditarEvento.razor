@@ -9,6 +9,12 @@
 @inject EventoDeportivoAltaUseCase EventoDeportivoAltaUseCase
 @inject EventoDeportivoModificacionUseCase EventoDeportivoModificacionUseCase
 @inject ListarEventosDeportivosUseCase ListarEventosDeportivosUseCase
+@inject UsuarioLogueadoUseCase UsuarioLogueadoUseCase
+@inject PoseeElPermisoUseCase PoseeElPermisoUseCase 
+@inject UsuarioActualUseCase UsuarioActualUseCase 
+
+<Sidebar />
+<Header />
 
 <PageTitle>@(_esNuevoEvento ? "Agregar evento" : "Modificar evento")</PageTitle>
 
@@ -64,7 +70,8 @@
 <style>
     .contenedor-formulario {
         max-width: 600px;
-        margin: 40px auto;
+          margin-left: 90px auto;
+           margin: 40px auto;
         padding: 30px;
         background-color: #fdfdfd;
         border-radius: 12px;
@@ -150,7 +157,11 @@
 </style>
 
 @code {
+
+
     EventoDeportivo _evento = new EventoDeportivo();
+    int _idActualUsuario;
+    bool _puedeModificarEvento = false;
     [Parameter] public int? Id { get; set; }
     bool _esNuevoEvento = true;
     string _mensajeError = "";
@@ -183,19 +194,30 @@
     {
         if (_esNuevoEvento)
         {
-            EventoDeportivoAltaUseCase.Ejecutar(_evento, 1); // usuarioId hardcodeado
+            EventoDeportivoAltaUseCase.Ejecutar(_evento, _idActualUsuario);
         }
         else
         {
-            EventoDeportivoModificacionUseCase.Ejecutar(_evento, 1);
+            EventoDeportivoModificacionUseCase.Ejecutar(_evento, _idActualUsuario);
         }
 
         _evento = new EventoDeportivo();
-        Navegador.NavigateTo("/listadoEventos");
+        Navegador.NavigateTo("/listadoEventosTotales/");
     }
     catch (Exception ex)
     {
         _mensajeError = ex.Message;
     }
    }
+
+    protected override void OnInitialized()
+    {
+        if (UsuarioLogueadoUseCase.Ejecutar()) {
+            
+            _idActualUsuario = (UsuarioActualUseCase.Ejecutar()).Id;
+            _puedeModificarEvento = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.EventoModificacion);
+
+        }
+
+    }
 }

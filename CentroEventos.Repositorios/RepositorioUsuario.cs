@@ -3,7 +3,7 @@ namespace CentroEventos.Repositorios;
 using CentroEventos.Aplicacion.Entidades;
 using CentroEventos.Aplicacion.Interfaces;
 
-public class RepositorioUsuario : IRepositorioUsuario
+public class RepositorioUsuario (IRepositorioReserva repoReserva) : IRepositorioUsuario
 {
     public void AgregarUsuario(Usuario datosUsuario)
     {
@@ -56,8 +56,44 @@ public class RepositorioUsuario : IRepositorioUsuario
 
         return usuarios;
     }
+    
     public List<Usuario> ListarAsistenciaAEvento(int idEvento)
     {
-        return null;
+        var listaIdsUsuarios = new List<int>();
+
+        var listaReservas = repoReserva.ListarReservas();
+        foreach (Reserva r in listaReservas)
+        {
+            if (r.EventoDeportivoId == idEvento)
+            {
+                listaIdsUsuarios.Add(r.PersonaId);
+            }
+        }
+
+        var listaUsuariosAsistidos = new List<Usuario>();
+
+        var listaUsuariosTotales = ListarUsuarios();
+
+        foreach (Usuario u in listaUsuariosTotales)
+        {
+            if (listaIdsUsuarios.Contains(u.Id))
+            {
+                listaUsuariosAsistidos.Add(u);
+            }
+
+        }
+
+        return listaUsuariosAsistidos;
+    }
+
+    public bool PrimerUsuario()
+    {
+        using var context = new CentroEventosContext();
+        if (!context.Usuarios.Any())
+        {
+            return true;
+
+        }
+        return false;
     }
 }

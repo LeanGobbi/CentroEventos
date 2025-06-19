@@ -10,12 +10,15 @@ public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador valid
     public void Ejecutar(Usuario datosUsuario, int idUsuario)
     {
         string mensajeError;
-
         IServicioAutorizacion.Permisos permiso = IServicioAutorizacion.Permisos.UsuarioAlta;
-        if (!servicioAutorizacion.PoseeElPermiso(idUsuario, permiso))
+
+        if (!repo.PrimerUsuario())
         {
-            mensajeError = "ERROR: El usuario no tiene permiso para realizar esta operación. \n";
-            throw new FalloAutorizacionException(mensajeError);
+            if (!servicioAutorizacion.PoseeElPermiso(idUsuario, permiso))
+            {
+                mensajeError = "ERROR: El usuario no tiene permiso para realizar esta operación. \n";
+                throw new FalloAutorizacionException(mensajeError);
+            }
         }
 
         if (!validadorU.ValidarFormatoCampos(datosUsuario, out mensajeError))
@@ -27,7 +30,7 @@ public class UsuarioAltaUseCase(IRepositorioUsuario repo, UsuarioValidador valid
         {
             throw new DuplicadoException(mensajeError);
         }
-        
+
         repo.AgregarUsuario(datosUsuario);
     }
 }

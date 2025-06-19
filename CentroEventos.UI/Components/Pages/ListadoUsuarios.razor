@@ -7,6 +7,13 @@
 @inject ListarUsuariosUseCase ListarUsuariosUseCase
 
 <DialogoConfirmacion @ref="dialogo" OnConfirmado="Eliminar" />
+@inject UsuarioLogueadoUseCase UsuarioLogueadoUseCase
+@inject PoseeElPermisoUseCase PoseeElPermisoUseCase 
+@inject UsuarioActualUseCase UsuarioActualUseCase 
+
+<Sidebar />
+<Header />
+
 
 <div class="contenedor-tabla">
 @if (!string.IsNullOrEmpty(_mensajeError))
@@ -27,9 +34,12 @@
                  <th>NOMBRE</th>
                  <th>APELLIDO</th>
                  <th>EMAIL</th>
-                 <th>CONTRASEÑA</th>
                  <th>PERMISOS</th>
+                
+                @if ((_puedeModificarUsuario) || (_puedeEliminarUsuario)) 
+                {
                  <th>ACCIÓN</th>
+                }
             </tr>
        </thead>
     <tbody>
@@ -40,7 +50,6 @@
                     <td>@usuario.Nombre</td>
                     <td>@usuario.Apellido</td>
                     <td>@usuario.Email</td>
-                    <td>@usuario.Contraseña</td>
                     <td>
                     @foreach (var permiso in usuario.Permisos)
                     {
@@ -48,10 +57,16 @@
                     } 
                    </td>
                     <td>
-                        <div class="botones-accion">
-                            <button class="btn btn-primary" @onclick="() => Modificar(usuario)">Editar</button>
-                            <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(usuario)">Eliminar</button>
-                        </div>
+                          <div class="botones-accion">
+                          @if (_puedeModificarUsuario)
+                          {
+                              <button class="btn btn-primary" @onclick="() => Modificar(usuario)">Editar</button>
+                          }
+                          @if (_puedeEliminarUsuario)
+                          {
+                              <button class="btn btn-danger" @onclick="() => ConfirmarEliminacion(usuario)">Eliminar</button>
+                          }
+                          </div>
                     </td>
                 </tr>
             }
@@ -64,6 +79,8 @@
         max-width: 90%;
         margin: 30px auto;
         padding: 20px;
+         margin-left: 60px auto;
+        padding-left: 190px;
         background-color: #fefefe;
         border-radius: 12px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -140,13 +157,10 @@
 
 @code {
     List<Usuario> listaUsuarios = new List<Usuario>();
-
+    int _idActualUsuario;
+    bool _puedeModificarUsuario = false;
+    bool _puedeEliminarUsuario = false;
     string _mensajeError = "";
-
-    protected override void OnInitialized()
-    {
-        listaUsuarios = ListarUsuariosUseCase.Ejecutar();
-    }
 
     DialogoConfirmacion dialogo = null!;
     Usuario? _usuarioParaEliminar = null;
@@ -164,8 +178,8 @@
       {
         if (_usuarioParaEliminar != null)
         {
-            UsuarioBajaUseCase.Ejecutar(_usuarioParaEliminar.Id, 1);
-            Navegador.NavigateTo("/listadoUsuarios", forceLoad: true);
+            UsuarioBajaUseCase.Ejecutar(_usuarioParaEliminar.Id, _idActualUsuario);
+            Navegador.NavigateTo("/listadoUsuarios");
         }
       }
       catch (Exception ex)
@@ -178,5 +192,19 @@
     {
         Navegador.NavigateTo($"/usuario/{usuario.Id}");
     }
+
+        protected override void OnInitialized()
+    {
+        listaUsuarios = ListarUsuariosUseCase.Ejecutar();
+
+        if (UsuarioLogueadoUseCase.Ejecutar()) {
+            
+            _idActualUsuario = (UsuarioActualUseCase.Ejecutar()).Id;
+            _puedeModificarUsuario = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.UsuarioModificacion);
+            _puedeEliminarUsuario = PoseeElPermisoUseCase.Ejecutar(_idActualUsuario, IServicioAutorizacion.Permisos.UsuarioBaja);
+
+        }
+
+    }   
 }
 
